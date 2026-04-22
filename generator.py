@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 import random
 import os
 
-# Ensure data directory exists
+# Ensure data directory exists - Health Check to prevent file write errors 
 os.makedirs('data', exist_ok=True)
 
 # Define products with shelf life and cost ranges
@@ -18,7 +18,7 @@ products = {
 # Suppliers
 suppliers = ['Supplier A', 'Supplier B', 'Supplier C']
 
-# Generate stock.csv: 120 SKUs
+# Generate stock.csv: 120 SKUs(Build an array of 120 SKUs ,call the random method from the random module)
 skus = []
 sku_id = 1
 for product, info in products.items():
