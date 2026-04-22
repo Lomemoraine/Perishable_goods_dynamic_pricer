@@ -53,7 +53,7 @@ def suggest_price(sku, now, competitor_snapshot, unit_cost, margin_floor=1.1):
 
     return {
         "sku": sku["sku_id"],
-        "chosen_price": round(price, 2),
+        "chosen_price": float(round(price, 2)),
         "freshness_factor": round(f, 3),
         "rationale": f"Competitor mean={competitor_mean:.2f}, min={competitor_min:.2f}, decay={f:.3f}"
     }
