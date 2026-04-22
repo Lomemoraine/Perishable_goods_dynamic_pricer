@@ -59,20 +59,31 @@ def suggest_price(sku, now, competitor_snapshot, unit_cost, margin_floor=1.1):
     }
 
 if __name__ == "__main__":
+    import argparse
+    import pandas as pd
+
     parser = argparse.ArgumentParser()
-    parser.add_argument("--sku", type=str, required=True)
-    parser.add_argument("--now", type=str, required=True)
+    parser.add_argument("--sku", type=int, required=True, help="SKU ID from stock.csv")
+    parser.add_argument("--now", type=str, required=True, help="Current timestamp in ISO format")
     args = parser.parse_args()
 
-    # Example usage (replace with actual data loading)
-    sku_example = {
-        "sku_id": args.sku,
-        "purchased_at": datetime(2026, 4, 18, 9, 0),  # Example purchase time
-        "shelf_life_hours": 72
-    }
-    now = datetime.fromisoformat(args.now)
-    competitor_snapshot = [500, 520, 510]  # Example competitor prices
-    unit_cost = 400
+    # Load stock data
+    stock = pd.read_csv("data/stock.csv", parse_dates=["purchased_at"])
+    sku_row = stock.loc[stock["sku_id"] == args.sku].iloc[0]
 
-    result = suggest_price(sku_example, now, competitor_snapshot, unit_cost)
+    # Load competitor prices for this product at the given time
+    competitor_prices = pd.read_csv("data/competitor_prices.csv", parse_dates=["timestamp"])
+    comp_snapshot = competitor_prices.loc[
+        (competitor_prices["timestamp"] == pd.to_datetime(args.now)) &
+        (competitor_prices["product"] == sku_row["product"])
+    ]["price"].tolist()
+
+    # Run pricer
+    result = suggest_price(
+        sku_row.to_dict(),
+        pd.to_datetime(args.now),
+        comp_snapshot,
+        sku_row["unit_cost_xaf"]
+    )
+
     print(result)
