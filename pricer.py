@@ -9,6 +9,8 @@ def freshness_factor(age_hours: float, shelf_life_hours: float) -> float:
     Justified: This formula models rapid decay near expiration, common for perishables like tomatoes or milk,
     ensuring freshness_factor drops monotonically from 1 to 0.
     """
+    if shelf_life_hours <= 0:
+        return 0.0  # Avoid division by zero
     return max(0.0, 1.0 - (age_hours / shelf_life_hours) ** 1.5)
 
 def suggest_price(sku, now, competitor_snapshot, unit_cost, margin_floor=1.1):
@@ -26,6 +28,7 @@ def suggest_price(sku, now, competitor_snapshot, unit_cost, margin_floor=1.1):
     purchased_at = sku["purchased_at"]
     shelf_life = sku["shelf_life_hours"]
     age_hours = (now - purchased_at).total_seconds() / 3600
+    age_hours = max(0, age_hours)  # Ensure non-negative to avoid complex numbers
 
     # Step 2: Freshness factor
     f = freshness_factor(age_hours, shelf_life)
