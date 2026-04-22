@@ -8,7 +8,7 @@ SMS 2: Tip: Sell milk early (expires fast). Tomatoes steady till evening.
 SMS 3: Reminder: Prices update daily. Check board or ask agent.
 
 **Fallback**  
-- Voice call in Kinyarwanda for illiterate vendors.  
+- Voice call in Kalenjin for illiterate vendors.  
 - Picture sheet pinned at stall.  
 - Agent relay for non-phone users.
 
